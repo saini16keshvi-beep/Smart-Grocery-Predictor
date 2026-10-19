@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Edit purchase{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('purchases') }}">Purchase history</a> <span>/</span> Edit{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">PURCHASE RECORD</div><h1>Edit purchase</h1><p class="page-subtitle">Update the details used in your spending and restock insights.</p></div><a class="button button-outline" href="{{ url_for('purchases') }}">← Back to history</a></div>
+<section class="panel edit-panel"><form method="post" class="edit-form purchase-form"><label>Item name<input name="item_name" value="{{ purchase.item_name }}" required maxlength="80"></label><label>Category<input name="category" value="{{ purchase.category }}" required maxlength="50"></label><label>Quantity<input name="quantity" type="number" min="0.01" step="0.01" value="{{ purchase.quantity }}" required></label><label>Unit price<input name="unit_price" type="number" min="0" step="0.01" value="{{ purchase.unit_price }}" required></label><label>Purchase date<input name="purchase_date" type="date" value="{{ purchase.purchase_date }}" required></label><label class="form-notes">Notes<input name="notes" value="{{ purchase.notes }}" maxlength="200"></label><div class="form-actions"><button class="button button-primary" type="submit">Save changes</button><a class="button button-outline" href="{{ url_for('purchases') }}">Cancel</a></div></form></section>
+{% endblock %}

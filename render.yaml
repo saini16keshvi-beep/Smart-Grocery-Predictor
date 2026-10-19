@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: smartbasket
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    disk:
+      name: smartbasket-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /var/data/smartbasket.sqlite3
+      - key: SECRET_KEY
+        generateValue: true

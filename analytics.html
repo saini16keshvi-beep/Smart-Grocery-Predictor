@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Analytics{% endblock %}
+{% block breadcrumb %}Analytics{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">PURCHASE PATTERNS</div><h1>Analytics</h1><p class="page-subtitle">Understand how your spending and shopping frequency change over time.</p></div><a class="button button-outline" href="{{ url_for('purchases') }}">View purchase history →</a></div>
+<div class="analytics-grid"><section class="panel analytics-panel"><div class="panel-heading"><div><h2>Monthly spending</h2><p>Total purchase value per month</p></div><span class="chart-unit">USD</span></div><div class="chart-wrap chart-analytics"><canvas id="spendingChart" aria-label="Monthly spending chart"></canvas></div></section><section class="panel analytics-panel"><div class="panel-heading"><div><h2>Purchase frequency</h2><p>Recorded entries per month</p></div><span class="chart-unit">ENTRIES</span></div><div class="chart-wrap chart-analytics"><canvas id="frequencyChart" aria-label="Monthly purchase frequency chart"></canvas></div></section><section class="panel analytics-panel"><div class="panel-heading"><div><h2>Spending by category</h2><p>Where purchase value is recorded</p></div></div><div class="chart-wrap chart-donut"><canvas id="categoryChart" aria-label="Category spending chart"></canvas></div></section><section class="panel analytics-panel"><div class="panel-heading"><div><h2>Popular items</h2><p>Quantity purchased by item</p></div></div><div class="chart-wrap chart-analytics"><canvas id="itemsChart" aria-label="Popular items chart"></canvas></div></section></div>
+<script id="analytics-data" type="application/json">{{ charts|tojson }}</script>
+{% endblock %}

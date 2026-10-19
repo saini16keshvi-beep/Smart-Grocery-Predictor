@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Overview{% endblock %}
+{% block breadcrumb %}Overview{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><div class="eyebrow">TUESDAY, {{ now_label or '' }}</div><h1>Your grocery rhythm</h1><p class="page-subtitle">A clearer view of what your household buys and what may be running low.</p></div>
+  <a class="button button-primary" href="{{ url_for('purchases') }}#add-purchase"><span>＋</span> Add purchase</a>
+</div>
+<div class="stats-grid">
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon green">▤</span><span class="stat-context">ALL TIME</span></div><div class="stat-value">{{ summary.total_purchases }}</div><div class="stat-label">Purchase entries</div><div class="stat-foot">Latest: {{ summary.latest_purchase or 'No purchases yet' }}</div></article>
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon amber">＄</span><span class="stat-context">ALL TIME</span></div><div class="stat-value">${{ '%.2f'|format(summary.total_spending) }}</div><div class="stat-label">Recorded spending</div><div class="stat-foot">${{ '%.2f'|format(summary.average_basket) }} average per entry</div></article>
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon blue">◇</span><span class="stat-context">CATALOG</span></div><div class="stat-value">{{ summary.unique_items }}</div><div class="stat-label">Unique grocery items</div><div class="stat-foot">Across your purchase history</div></article>
+  <article class="stat-card stat-feature"><div class="stat-top"><span class="stat-icon cream">✳</span><span class="stat-context">RESTOCK WATCH</span></div><div class="stat-value">{{ predictions|selectattr('priority', 'equalto', 'HIGH')|list|length }}</div><div class="stat-label">Items due soon</div><div class="stat-foot"><a href="{{ url_for('shopping_list') }}">Review smart list <span>→</span></a></div></article>
+</div>
+<div class="dashboard-grid">
+  <section class="panel spending-panel"><div class="panel-heading"><div><h2>Spending trend</h2><p>Purchase value by week</p></div><span class="panel-tag">LAST 8 WEEKS</span></div><div class="chart-wrap chart-large"><canvas id="weeklyChart" aria-label="Weekly spending chart"></canvas></div></section>
+  <section class="panel top-items-panel"><div class="panel-heading"><div><h2>Most purchased</h2><p>By total quantity</p></div><a class="text-link" href="{{ url_for('analytics_page') }}">Details →</a></div>
+    {% if summary.most_purchased %}<div class="rank-list">{% for item in summary.most_purchased %}<div class="rank-row"><span class="rank-number">0{{ loop.index }}</span><span class="rank-name">{{ item.item_name }}</span><span class="rank-track"><span style="width: {{ [100, (item.quantity / summary.most_purchased[0].quantity * 100)|round]|min }}%"></span></span><span class="rank-value">{{ item.quantity|round(1) }}</span></div>{% endfor %}</div>{% else %}<div class="empty-state">Your most purchased items will appear here.</div>{% endif %}
+  </section>
+</div>
+<div class="dashboard-grid lower-grid">
+  <section class="panel predictions-panel"><div class="panel-heading"><div><h2>Restock predictions</h2><p>Estimated from your repeat purchase patterns</p></div><a class="text-link" href="{{ url_for('shopping_list') }}">View smart list →</a></div>
+    {% if predictions %}<div class="prediction-table"><div class="table-head prediction-head"><span>ITEM</span><span>PRIORITY</span><span>EXPECTED</span><span>CONFIDENCE</span></div>{% for item in predictions %}<div class="prediction-row"><span class="item-cell"><span class="item-dot dot-{{ loop.index0 % 5 }}"></span><span><strong>{{ item.item_name }}</strong><small>{{ item.reason }}</small></span></span><span><span class="priority priority-{{ item.priority|lower }}">{{ item.priority }}</span></span><span class="date-cell">{{ item.expected_date }}</span><span class="score-cell"><span class="mini-track"><i style="width: {{ item.score_percent }}%"></i></span>{{ item.score_percent }}%</span></div>{% endfor %}</div>{% else %}<div class="empty-state">Add a few purchases for restock predictions.</div>{% endif %}
+  </section>
+  <section class="panel insights-panel"><div class="panel-heading"><div><h2>Basket insights</h2><p>Signals from your real data</p></div><span class="insight-mark">✳</span></div><div class="insight-list">{% for insight in insights %}<div class="insight-row"><span class="insight-bullet">↗</span><p>{{ insight }}</p></div>{% endfor %}</div><a class="insight-link" href="{{ url_for('analytics_page') }}">Explore analytics <span>→</span></a></section>
+</div>
+<script id="dashboard-data" type="application/json">{{ charts|tojson }}</script>
+{% endblock %}
