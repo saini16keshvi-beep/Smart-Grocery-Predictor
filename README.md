@@ -64,3 +64,13 @@ SQLite tables are created automatically when the app starts. The starter CSV is 
 ```powershell
 uv run python -m unittest discover -s tests -v
 ```
+## 🚀 Live Demo
+
+[Click here to open Smart Grocery Predictor](https://smart-grocery-predictor.onrender.com/)
+
+## 🛠️ Technologies Used
+- Python
+- Flask
+- Machine Learning
+- SQLite
+- HTML and CSS
